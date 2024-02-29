@@ -2,7 +2,8 @@ const express = require('express')
 const fs = require('fs')
 
 const { conn } = require('../config.js')
-const { $sql, checkId } = require('./sqlMap.js')
+const { $sql, checkId, loginVaild } = require('./sqlMap.js')
+const { error } = require('console')
 
 const router = express.Router()
 
@@ -24,17 +25,30 @@ router.post('/regis', (req, res) => {
     })
 })
 
-
-
-
-
 router.post('/login', (req, res) => {
     const { user, password } = req.body
+    const params = [user, password, user, password]
 
-    conn.query($sql.mainTable, (err, result) => {
+    conn.query(loginVaild('user'), params, (err, result) => {
         if (err) throw err;
-        console.log(result)
-        res.status(200).json({ result })
+        const isValid = result[0].result
+        const id = result[0].id
+        if (isValid) {
+            
+            conn.query($sql.returnId, id, (err, res2) => {
+                if (err) throw err;
+                
+                console.log(res2)
+                res.status(200).json({
+                    Validstatus: true,
+                    userdata: res2
+                })
+            })
+        } else {
+            res.status(400).json({
+                message: "查无用户！请重新注册！"
+            })
+        }
     })
 })
 

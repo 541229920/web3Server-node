@@ -1,32 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
-interface Form {
-  address: String,
-  user: String,
-  password: String
-}
-const FormObjData = ref<Form>({})
-
-const getMetaMaskAddress = () => {
-  if (window.ethereum) {
-    window.ethereum.request({
-      method: 'eth_requestAccounts'
-    }).then(result => {
-      FormObjData.value.address = result[0]
-    })
-  }
-}
-
-const CheckEventAxios = () => {
-  console.log(FormObjData.value)
-  axios.post('http://localhost:8080/post/regis', FormObjData.value).then(res => {
-    console.log(res)
-  }).catch(err => {
-    console.log(err)
-  })
-}
+import { getMetaMaskAddress, CheckEventAxios,FormObjData} from '@/uitls/RegisLogin'
 
 </script>
 
@@ -48,7 +21,7 @@ const CheckEventAxios = () => {
 
         <div class="btnEvent">
           <button @click="getMetaMaskAddress()">绑定MetaMask</button>
-          <button @click="CheckEventAxios()">注册</button>
+          <button @click="CheckEventAxios('regis')">注册</button>
         </div>
       </div>
     </div>
