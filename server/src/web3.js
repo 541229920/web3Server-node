@@ -1,20 +1,18 @@
-const Web3 = require('web3')
+const { Web3 } = require('web3')
 
-// const web3 = new Web3('https://mainnet.infura.io/v3/63b9f047b0ea4006ab1ae11771fde92f')
+const Provider = new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/63b9f047b0ea4006ab1ae11771fde92f')
+
+const web3 = new Web3(Provider)
 const address = '0x614a8538927CDD5e4117c5814aE3818001041ea9'
 
+web3.eth.getTransactionCount(address).then(count => {
+    console.log(`Address ${address} has performed ${count} transactions`);
+});
 
-Web3.eth.getBlockTransactionCount(address,'latest').then(trans=>{
-const transCount = trans - 1
-console.log(transCount)
-// Web3.eth.getTransaction()
-})
+web3.eth.getTransactions({address: address})
+.then(transactions => {
+  console.log(`Address ${address} has ${transactions.length} transactions:`);
+  console.log(transactions); 
+});
 
-
-// web3.({
-//     address: address,
-//     fromBlock: 0,
-//     toBlock: 'latest'
-// }).then((trans) => {
-//     console.log(trans[0])
-// })
+console.log(web3)
