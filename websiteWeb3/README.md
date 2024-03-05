@@ -44,3 +44,6 @@ npm run build
 ```sh
 npm run test:unit
 ```
+
+本次更新了UI框架naive-ui，naive-ui 优化了注册页面，登录页面待优化
+

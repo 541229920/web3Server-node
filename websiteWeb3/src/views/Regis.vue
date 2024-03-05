@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { getMetaMaskAddress, CheckEventAxios, FormObjData } from '@/uitls/RegisLogin'
-import { defineComponent, ref } from 'vue'
-import {
-  FormInst,
-  FormItemInst,
-  FormItemRule,
-  useMessage,
-  FormRules
-} from 'naive-ui'
+
+import { ref } from 'vue'
+import { type FormInst, type FormItemInst, type FormItemRule, useMessage, type FormRules } from 'naive-ui'
 import axios from 'axios'
 import router from '@/router';
 
@@ -15,6 +9,7 @@ interface ModelType {
   username: string | null
   password: string | null
   reenteredPassword: string | null
+  metamaskAddress: string | null
 }
 
 const formRef = ref<FormInst | null>(null)
@@ -23,9 +18,23 @@ const message = useMessage()
 const modelRef = ref<ModelType>({
   username: null,
   password: null,
-  reenteredPassword: null
+  reenteredPassword: null,
+  metamaskAddress: null
 })
 const model = modelRef
+
+
+const getMetaMaskAddress = () => {
+  if (window.ethereum) {
+    window.ethereum.request({
+      method: 'eth_requestAccounts'
+    }).then((result: (string | null)[]) => {
+      modelRef.value.metamaskAddress = result[0]
+    })
+  }
+}
+
+
 const validatePasswordStartWith = (
   rule: FormItemRule,
   value: string
@@ -82,27 +91,32 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
-      message.success('验证成功')
-      axios.post('http://localhost:8080/post/regis', FormObjData.value).then(res => {
-        console.log(res)
-
+      axios.post('http://localhost:8080/post/regis', model.value).then(res => {
+        if (res.data.isVaild) {
+          router.push('/login')
+        } else {
+          message.warning(res.data.message)
+        }
       }).catch(err => {
         console.log(err)
+        message.error('注册失败')
       })
-
     } else {
-      console.log(errors)
-      message.error('验证失败')
+      message.error('注册失败')
     }
   })
 }
 
+const loginin = () => {
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="bg">
     <div class="regis">
       <div class="regisTable">
+        <n-h1 class="registitle">注册</n-h1>
         <div class="logo"></div>
         <div class="Table">
           <n-form ref="formRef" :model="model" :rules="rules">
@@ -121,9 +135,15 @@ const handleValidateButtonClick = (e: MouseEvent) => {
               <n-col :span="24">
 
                 <div class="butEvent">
-                  <n-button round @click="getMetaMaskAddress">连接小狐狸</n-button><span class="metamaskAddress">{{
-            FormObjData.address }}</span>
-                  <div style="display: flex; justify-content: flex-end">
+                  <div class="metamaskEvent">
+                    <n-button class="metamask" round @click="getMetaMaskAddress">连接小狐狸</n-button><span
+                      class="metamaskAddress">{{
+            model.metamaskAddress }}</span>
+                  </div>
+                  <div class="regins">
+                    <n-button round type="primary" @click="loginin">
+                      有账号，去登录
+                    </n-button>
                     <n-button :disabled="model.username === null" round type="primary"
                       @click="handleValidateButtonClick">
                       注册
@@ -140,69 +160,5 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 </template>
 
 <style scoped lang="less">
-@w: 640px;
-@h: 280px;
-
-.regisTable {
-  width: @w;
-  position: fixed;
-  top: calc(50% - @h );
-  left: calc(50% - @w /2);
-  background: #00000077;
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
-  box-shadow: 10px 10px 50px #00000077;
-  padding: 40px;
-  color: white;
-
-  .logo {
-    margin: 20px auto;
-    width: 260px;
-    height: 60px;
-    background: url('../images/header_logo/logo white.png')no-repeat;
-    background-size: contain;
-    background-position: center center;
-  }
-
-  .Table {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-
-
-
-    .Input {
-      font-size: 16px;
-      margin: 0 auto;
-    }
-
-    span {
-      min-width: max-content;
-      display: inline-block;
-    }
-  }
-}
-
-.bg {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: url('../images/wallhaven-1pwq23.png') no-repeat;
-  background-size: cover;
-}
-
-.butEvent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .metamaskAddress {
-
-    flex-grow: 1;
-    margin-left: 10px;
-  }
-}
+@import url('../assets/RegisLogin.less');
 </style>

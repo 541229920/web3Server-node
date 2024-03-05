@@ -1,6 +1,6 @@
 const $sql = {
     mainTable:'select * from user',
-    addUser:'INSERT INTO user(id,address,user,name,password) values(?,?,?,?,?)',
+    addUser:'INSERT INTO user(id,address,username,name,password) values(?,?,?,?,?)',
     returnId:'SELECT * FROM user WHERE id = ?'
 }
 
@@ -12,9 +12,9 @@ const loginVaild = (table)=>{
 
     return  `SELECT id,CASE WHEN EXISTS(
       SELECT 1 FROM ${table}  
-      WHERE user = ? AND password = ? 
+      WHERE username = ? AND password = ? 
   ) THEN CAST(1 AS UNSIGNED) ELSE CAST(0 AS UNSIGNED) END AS result
         FROM ${table}
-        WHERE user = ? AND password = ?`;
+        WHERE username = ? AND password = ?`;
     }
 module.exports = {$sql,checkId,loginVaild}
