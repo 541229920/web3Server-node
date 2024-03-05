@@ -28,6 +28,8 @@ const getMetaMaskAddress = () => {
 
 const CheckEventAxios = (api:any) => {
     axios.post('http://localhost:8080/post/'+ api, FormObjData.value).then(res => {
+
+    console.log(FormObjData.value)
         if(api == 'login'){
             loginEvent(res)
         }
@@ -41,6 +43,7 @@ const loginEvent = (res:any) => {
         userData.value.address = res.data.userdata[0].address
         userData.value.user = res.data.userdata[0].user
         console.log(userData.value,'走了')
+        router.push('/')
     }
 }
 

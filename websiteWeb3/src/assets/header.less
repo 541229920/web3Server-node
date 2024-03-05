@@ -1,13 +1,45 @@
-nav{
+@import "./media.less";
+
+header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    justify-content: space-between;
+
+    *{
+        color: black;
+    }
+}
+
+nav {
+    height: inherit;
     display: flex;
     justify-content: space-around;
     align-items: center;
 
-    .menu_content{
-        display: flex;
+    .logo {
+        width: 160px;
+        height: inherit;
+        background: url('../images/header_logo/logo black.png') no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
 
-        a{
-            margin: 5px 10px;
+    .mediumlogo {
+        background: url('../images/header_logo/logo50.png') no-repeat;
+        background-size: contain;
+        background-position: center center;
+    }
+
+    .routerlinks {
+        margin: 0 50px;
+
+        a {
+            padding: 10px 20px;
         }
     }
+}
+.hrStyle{
+    border-bottom: 1px solid #ececec;
 }

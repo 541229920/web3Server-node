@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {  CheckEventAxios, userData,FormObjData} from '@/uitls/RegisLogin'
+import {  CheckEventAxios, FormObjData} from '@/uitls/RegisLogin'
 
 </script>
 
@@ -21,6 +21,7 @@ import {  CheckEventAxios, userData,FormObjData} from '@/uitls/RegisLogin'
                 <div class="btnEvent">
                     <!-- <button @click="getMetaMaskAddress()">绑定MetaMask</button> -->
                     <button @click="CheckEventAxios('login')">登录</button>
+                    <RouterLink to="/regis">没有账户？去注册一个吧！</RouterLink>
                 </div>
             </div>
         </div>
@@ -47,8 +48,11 @@ import {  CheckEventAxios, userData,FormObjData} from '@/uitls/RegisLogin'
         text-align: left;
 
         .btnEvent {
+            height: 60px;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
         }
     }
 }
@@ -56,5 +60,10 @@ import {  CheckEventAxios, userData,FormObjData} from '@/uitls/RegisLogin'
 p {
     margin: 0;
     padding: 0;
+}
+
+a{
+    color: rgb(36, 11, 0);
+    font-size: 12px;
 }
 </style>

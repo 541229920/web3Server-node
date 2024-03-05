@@ -1,11 +1,5 @@
 <template>
-    <div class="header">
-        <div class="wallet"><span>登录用户:{{sasasa}}</span></div>
-        <header>
-            <compHeader />
-        </header>
-    </div>
-
+<compHeader></compHeader>
     <main>
         <RouterView />
     </main>
