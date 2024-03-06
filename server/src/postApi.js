@@ -17,24 +17,23 @@ const checkUserExists = (username) => {
         const checkUserQuery = 'SELECT id,CASE WHEN EXISTS( SELECT 1 FROM user  WHERE username = ? ) THEN CAST(1 AS UNSIGNED) ELSE CAST(0 AS UNSIGNED) END AS result FROM user WHERE username = ? ';
 
         conn.query(checkUserQuery, [sanitizeInput(username), sanitizeInput(username)], (err, result) => {
-            
-            if (err) throw err;
- 
-            if (result[0].result) {
-                const isValid = result[0].result
-                const id = result[0].id
-                const data = {
-                    isValid, id
-                }
-                resolve(data);
+            if (err) {
+                return reject(err)
+            }
+            if (!result || result.length === 0) {
+                return resolve({ isValid: 0 })
             } else {
-                console.log('没信息')
-                reject(err);
+                const data = {
+                    isValid: result[0].result,
+                    id: result[0].id
+                }
+                return resolve(data);
             }
         });
     });
 };
 
+// 注册用户
 router.post('/regis', async (req, res) => {
     const { username, password, metamaskAddress, name } = req.body;
 
@@ -55,7 +54,6 @@ router.post('/regis', async (req, res) => {
         const getMaxIdQuery = 'SELECT MAX(id) AS max_id FROM user';
         conn.query(getMaxIdQuery, (err, result) => {
             if (err) {
-                console.error('Error getting max id:', err);
                 return res.status(500).json({ error: 'Internal server error' });
             }
 
@@ -67,7 +65,6 @@ router.post('/regis', async (req, res) => {
 
             conn.query(insertUserQuery, insertParams, (err, succsc) => {
                 if (err) {
-                    console.error('Error inserting user:', err);
                     return res.status(500).json({ error: 'Internal server error' });
                 }
 
@@ -75,18 +72,18 @@ router.post('/regis', async (req, res) => {
 
                 res.status(200).json({
                     message: '注册成功',
-                    userId: newUserId
+                    userId: newUserId,
+                    isValid: true
                 });
             });
         })
 
     } catch (err) {
-        console.error('Error checking user:', err);
         return res.status(500).json({ error: 'Internal server error' });
     }
 })
 
-
+//登录用户
 router.post('/login', async (req, res) => {
     const { username, password, metamaskAddress, name } = req.body;
 
@@ -96,21 +93,38 @@ router.post('/login', async (req, res) => {
     const sanitizedName = sanitizeInput(name);
 
     try {
+        //查询是否有用户
         const userExists = await checkUserExists(sanitizedUsername);
-
         if (userExists.isValid) {
+            //确定有用户
             const CheckID = 'SELECT * FROM user WHERE id = ?'
             conn.query(CheckID, userExists.id, (err, result) => {
                 if (err) throw err;
-                res.status(200).json({
-                    Validstatus: true,
-                    userdata: result
-                })
-            })
-        }
+                //需要后台服务器验证账号密码是否匹配
+                if (sanitizedPassword == result[0].password) {
 
+                    const userdata = {
+                        username: result[0].username,
+                        address: result[0].address,
+                        name: result[0].name,
+                        userId: result[0].id
+                    }
+                    return res.status(200).json({
+                        Validstatus: true,
+                        userdata: userdata
+                    })
+                } else {
+                    return res.status(401).json({
+                        Validstatus: false,
+                        message: "密码不正确，请重新输入密码！"
+                    })
+                }
+            })
+        } else {
+            return res.status(404).json({ message: "该用户名未注册或账号密码错误，请重试！", err })
+        }
     } catch (err) {
-        res.status(500).json({ message: "查无用户！请重新注册！", err })
+        return res.status(500).json({ error: 'Internal server error' });
     }
 })
 

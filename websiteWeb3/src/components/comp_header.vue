@@ -13,7 +13,7 @@
         <nav>
             <n-dropdown trigger="hover" :options="options" @select="handleSelect">
                 <n-tag>
-                    0x000****666
+                    {{ ShowUserName() }}
                     <template #avatar>
                         <n-avatar :src="assestSrc.UserPhotoUrl('photo')" />
                     </template>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { useMessage } from 'naive-ui';
 import { AssestSrc } from '@/uitls/assestSrc';
 
@@ -34,6 +34,7 @@ import '@/assets/header.less';
 
 const assestSrc = new AssestSrc()
 const message = useMessage()
+const route = useRoute()
 
 const options = [
     {
@@ -57,4 +58,12 @@ const handleSelect = (key: string | number) => {
     }
 }
 
+const userInfo = route.params
+const ShowUserName = () => {
+    if (!userInfo.address) {
+        return userInfo.username
+    } else {
+        return `${userInfo.address.slice(0, 3) + '****' + userInfo.address.slice(-5)}`
+    }
+}
 </script>

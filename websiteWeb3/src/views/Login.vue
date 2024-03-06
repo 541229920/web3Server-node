@@ -74,18 +74,23 @@ const handleValidateButtonClick = (e: MouseEvent) => {
     formRef.value?.validate((errors) => {
         if (!errors) {
             axios.post('http://localhost:8080/post/login', model.value).then(res => {
-                message.success('登录成功')
-                // router.push('/')
-                console.log(res)
+                message.success('登录成功！')
+                // console.log(res.data.userdata)
+                router.push({
+                    name: '/',
+                    params: {
+                        username: res.data.userdata.username,
+                        address: res.data.userdata.address,
+                        name: res.data.userdata.name
+                    }
+                })
+
             }).catch(err => {
-                message.error('登录失败')
+                message.error(err.response.data.message)
             })
-        } else {
-            message.error('登录失败')
         }
     })
 }
-
 
 const toRegis = () => {
     router.push('/regis')
@@ -118,7 +123,7 @@ const toRegis = () => {
                                     </n-button>
                                     <n-button round @click="toRegis">没有账户？快去注册一个吧！</n-button>
                                     <n-button round>忘记密码</n-button>
-                                   
+
                                 </div>
                             </n-col>
                         </n-row>

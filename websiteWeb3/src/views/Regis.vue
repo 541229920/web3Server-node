@@ -92,7 +92,8 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   formRef.value?.validate((errors) => {
     if (!errors) {
       axios.post('http://localhost:8080/post/regis', model.value).then(res => {
-        if (res.data.isVaild) {
+        if (res.data.isValid) {
+          message.success(res.data.message)
           router.push('/login')
         } else {
           message.warning(res.data.message)
@@ -110,6 +111,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 const loginin = () => {
   router.push('/login')
 }
+
 </script>
 
 <template>
@@ -133,12 +135,9 @@ const loginin = () => {
             </n-form-item>
             <n-row :gutter="[0, 24]">
               <n-col :span="24">
-
                 <div class="butEvent">
                   <div class="metamaskEvent">
-                    <n-button class="metamask" round @click="getMetaMaskAddress">连接小狐狸</n-button><span
-                      class="metamaskAddress">{{
-            model.metamaskAddress }}</span>
+                    <n-button class="metamask" round @click="getMetaMaskAddress">连接小狐狸</n-button>
                   </div>
                   <div class="regins">
                     <n-button round type="primary" @click="loginin">
@@ -150,6 +149,8 @@ const loginin = () => {
                     </n-button>
                   </div>
                 </div>
+                <p v-if="model.metamaskAddress" class="metamaskAddress"> Wallet Address：{{ model.metamaskAddress.slice(0, 5)}}***{{model.metamaskAddress.slice(-5)}}</p>
+                <p v-else></p>
               </n-col>
             </n-row>
           </n-form>
