@@ -1,13 +1,12 @@
 <template>
   <n-message-provider 
   :locale="zhCN" :date-locale="dateZhCN"
-
   >
     <n-config-provider 
     :theme-overrides="{ common: { fontWeightStrong: '600' } }"
     :theme="darkTheme"
     >
-      <RouterView />
+    <RouterView />
     </n-config-provider>
   </n-message-provider>
 </template>

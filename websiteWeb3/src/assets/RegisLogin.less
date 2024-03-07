@@ -1,6 +1,6 @@
-@w:520px;
+@w: 520px;
 
-.bg{
+.bg {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -11,7 +11,7 @@
     background-position: center center;
 }
 
-.regisTable{
+.regisTable {
     width: @w;
     position: fixed;
     left: calc(50% - @w /2);
@@ -22,46 +22,65 @@
     border-radius: 10px;
     box-shadow: 10px 20px 50px #000000b7;
     backdrop-filter: blur(10px);
+}
 
-    .butEvent{
+.butEvent {
+    display: flex;
+    justify-content: space-between;
+
+    .regins {
+        width: 240px;
         display: flex;
         justify-content: space-between;
-        .regins{
-            width: 240px;
+    }
+}
+
+.login-butEvent {
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+    justify-content: space-between;
+}
+
+.metamaskAddress {
+    color: white;
+}
+
+@media screen and (max-width:765px) {
+    @w:380px;
+    .regisTable {
+        width: @w;
+        position: fixed;
+        left: calc(50% - @w /2);
+        top: calc(50% /3);
+        padding: 40px;
+        box-sizing: border-box;
+        background: #000000a6;
+        border-radius: 10px;
+        box-shadow: 10px 20px 50px #000000b7;
+        backdrop-filter: blur(10px);
+
+    }
+
+    .butEvent {
+        display: flex;
+        justify-content: space-between;
+
+        .regins {
+            width: 100%;
             display: flex;
             justify-content: space-between;
         }
     }
 
-    .login-butEvent{
+    .login-butEvent {
         display: flex;
         flex-direction: column;
         height: 120px;
         justify-content: space-between;
     }
-    .metamaskAddress{
-        color: white;
-    }
-}
 
-@media screen and (max-width:765px) {
-    .regisTable{
-
-        .butEvent{
-            display: flex;
-            justify-content: space-between;
-            .regins{
-                width: 240px;
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-
-        .login-butEvent{
-            display: flex;
-            flex-direction: column;
-            height: 120px;
-            justify-content: space-between;
-        }
+    .metamask{
+        display: none;
     }
 }

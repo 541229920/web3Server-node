@@ -109,7 +109,9 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 }
 
 const loginin = () => {
-  router.push('/login')
+  router.push({
+    name: 'login'
+  })
 }
 
 </script>
@@ -149,7 +151,8 @@ const loginin = () => {
                     </n-button>
                   </div>
                 </div>
-                <p v-if="model.metamaskAddress" class="metamaskAddress"> Wallet Address：{{ model.metamaskAddress.slice(0, 5)}}***{{model.metamaskAddress.slice(-5)}}</p>
+                <p v-if="model.metamaskAddress" class="metamaskAddress"> Wallet Address：{{
+            model.metamaskAddress.slice(0, 5) }}***{{ model.metamaskAddress.slice(-5)}}</p>
                 <p v-else></p>
               </n-col>
             </n-row>

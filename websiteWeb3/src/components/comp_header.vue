@@ -5,9 +5,9 @@
             <div class="mediumlogo"></div>
             <div class="routerlinks">
                 <RouterLink to="/">首页</RouterLink>
-                <RouterLink to="/">资讯</RouterLink>
-                <RouterLink to="/">文件</RouterLink>
-                <RouterLink to="/">关于</RouterLink>
+                <RouterLink to="/news">资讯</RouterLink>
+                <RouterLink to="/file">文件</RouterLink>
+                <RouterLink to="/about">关于</RouterLink>
             </div>
         </nav>
         <nav>

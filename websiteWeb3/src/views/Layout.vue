@@ -1,6 +1,6 @@
 <template>
 <compHeader></compHeader>
-    <main>
+    <main class="mainView">
         <RouterView />
     </main>
 </template>

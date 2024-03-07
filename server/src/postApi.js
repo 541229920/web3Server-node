@@ -1,5 +1,6 @@
 const express = require('express')
 const fs = require('fs')
+const fetch = require('node-fetch');
 
 const { conn } = require('../config.js')
 const { $sql, checkId, loginVaild } = require('./sqlMap.js')
@@ -127,5 +128,30 @@ router.post('/login', async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 })
+
+
+router.post('/trx', async (req, res) => {
+
+    const apiKey = 'd088f9ab-17b3-488a-8f99-7b93478720f7';
+    const address = 'TCdTfftGiZYurxbcyHouCYCNjra1xwTpuU'
+    const endpoint = 'https://apilist.tronscanapi.com/api/transaction?address=' + address;
+
+    try {
+        await fetch(endpoint, {
+            headers: {
+                'TRON-PRO-API-KEY': apiKey
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                return res.status(200).json({ data })
+            })
+            .catch(error => console.error(error));
+    } catch (err) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+
 
 module.exports = router
